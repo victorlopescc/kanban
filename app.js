@@ -16,7 +16,7 @@ function renderTasks() {
     taskElement.ondragstart = drag;
 
     let dateContent = "Sem data";
-    if(task.dueDate) {
+    if (task.dueDate) {
       const date = new Date(task.dueDate);
       dateContent = `Data Limite: ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
     }
@@ -28,11 +28,35 @@ function renderTasks() {
             <div class="task-actions">
                 <button onclick="editTask('${task.id}')">Editar</button>
                 <button onclick="deleteTask('${task.id}')" class="delete-btn">Excluir</button>
+                ${task.status !== 'done' ? `<button onclick="completeTask('${task.id}')" class="complete-btn">Concluir</button>` : ''}
+                ${task.status !== 'done' ? `<button onclick="moveToNextColumn('${task.id}')" class="next-btn">Próximo</button>` : ''}
             </div>
         `;
 
     document.querySelector(`#${task.status} .tasks`).appendChild(taskElement);
   });
+}
+
+function moveToNextColumn(id) {
+  const task = tasks.find(t => t.id === id);
+  if (task) {
+    if (task.status === 'todo') {
+      task.status = 'progress';
+    } else if (task.status === 'progress') {
+      task.status = 'done';
+    }
+    saveTasks();
+    renderTasks();
+  }
+}
+
+function completeTask(id) {
+  const task = tasks.find(t => t.id === id);
+  if (task) {
+    task.status = 'done';
+    saveTasks();
+    renderTasks();
+  }
 }
 
 function openModal(editing = false) {
@@ -143,6 +167,7 @@ function drop(ev) {
     tasks.sort((a, b) => newOrder.indexOf(a.id) - newOrder.indexOf(b.id));
 
     saveTasks();
+    renderTasks(); // Re-render tasks to update the "Concluir" button dynamically
   }
 }
 

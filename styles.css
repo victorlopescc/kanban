@@ -90,3 +90,23 @@ input, textarea, input[type="datetime-local"] {
     background-color: #dc3545;
     color: white;
 }
+
+button.complete-btn {
+    background-color: #28a745; /* Green color */
+    color: white;
+}
+
+button.next-btn {
+    background-color: #ffc107; /* Yellow color */
+    color: black;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .column {
+        min-width: 100%; /* Full width for each column */
+    }
+}
